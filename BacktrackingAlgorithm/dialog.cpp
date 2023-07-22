@@ -1,5 +1,3 @@
-#define MAXCANDIDATES 9
-
 #include "dialog.h"
 #include "ui_dialog.h"
 
@@ -9,44 +7,16 @@ Dialog::Dialog(QWidget *parent)
 {
     ui->setupUi(this);
 
-    finished = false;
-    int A[NCELLS];
-    BoardType *board = new BoardType();
-    board->m[0][1] = 7;
-    board->m[0][2] = 2;
-    board->m[0][4] = 3;
-    board->m[0][7] = 8;
-    board->m[0][8] = 9;
 
-    board->m[1][0] = 5;
-    board->m[1][3] = 8;
+    QRegularExpression intRegEx("[1-9]\\d{0,3}");
+    QValidator *intValidator = new QRegularExpressionValidator(intRegEx, this);
+//    ui->lineEdit_Min->setValidator(intValidator);
+//    ui->lineEdit_Max->setValidator(intValidator);
+//    ui->lineEdit_XFreq->setValidator(intValidator);
 
-    board->m[2][0] = 8;
-    board->m[2][4] = 4;
+    QRegularExpression cellRegEx("[1-9X-X]\\d{0,3}w{0,1}");
+    cellValidator = new QRegularExpressionValidator(cellRegEx, this);
 
-    board->m[3][3] = 9;
-    board->m[3][5] = 2;
-    board->m[3][6] = 8;
-    board->m[3][7] = 7;
-
-    board->m[4][2] = 3;
-    board->m[4][5] = 5;
-    board->m[4][7] = 2;
-
-    board->m[6][0] = 3;
-    board->m[6][4] = 1;
-    board->m[6][6] = 5;
-
-    board->m[7][2] = 7;
-
-    board->m[8][6] = 6;
-    board->m[8][7] = 9;
-    board->m[8][8] = 1;
-
-    int freeCells = 81-23;
-    board->freecount = freeCells;
-    print_board(board);
-    backtrack(A, NCELLS - freeCells, board);
 }
 
 Dialog::~Dialog()
@@ -59,8 +29,8 @@ Dialog::~Dialog()
 
 void Dialog::backtrack(int a[], int k, BoardType *board)
 {
-    int c[MAXCANDIDATES];
-    for (int j = 0; j < MAXCANDIDATES; j++)
+    int c[DIMENSION];
+    for (int j = 0; j < DIMENSION; j++)
     {
         c[j] = 0;
     }
@@ -196,13 +166,108 @@ void Dialog::possible_values(int x, int y, BoardType *board, bool *possible)
 
 void Dialog::print_board(BoardType *board)
 {
-    for (int i = 0; i < 6 + 3; i++)
-    {
-        for (int j = 0; j < 6 + 3; j++)
+//    for (int i = 0; i < 6 + 3; i++)
+//    {
+//        for (int j = 0; j < 6 + 3; j++)
+//        {
+//            printf(" %d", board->m[i][j]);
+//        }
+//        printf("\n");
+//    }
+//    printf("\n");
+}
+
+
+
+
+void Dialog::on_pushButton_GenMap_clicked()
+{
+    mapGridLayoutClear();
+
+ //   int min = stoi(ui->lineEdit_Min->text().toStdString());
+   //             int random = min + (rand() % static_cast<int>(max - min + 1));
+    //            mapGridLayoutAddCell(QString::number(random), i, j);
+        for(int i=0; i<DIMENSION; i++)
         {
-            printf(" %d", board->m[i][j]);
+            for(int j=0; j<DIMENSION; j++)
+            {
+                mapGridLayoutAddCell("", i, j);
+            }
         }
-        printf("\n");
+}
+
+void Dialog::mapGridLayoutClear()
+{
+    QLayoutItem* cell;
+    while ((cell = ui->mapGridLayout->takeAt(0)) != NULL)
+    {
+        delete cell->widget();
+        delete cell;
     }
-    printf("\n");
+}
+
+void Dialog::mapGridLayoutAddCell(QString text, int i, int j)
+{
+    QLineEdit *le = new QLineEdit(text);
+    le->setFixedWidth(56);
+    le->setFixedHeight(56);
+    le->setValidator(cellValidator);
+    QFont font("Arial", 14);
+    font.setBold(true);
+    QFontMetrics fm(font);
+    le->setFont(font);
+    le->setAlignment(Qt::AlignCenter);
+    le->setObjectName("Foo");
+    int l = 1, r = 0, t = 1, b = 0;
+    if (i % 3 == 0)
+    {
+        t = 3;
+    }
+    if (i == 8)
+    {
+        b = 3;
+    }
+    if (j % 3 == 0)
+    {
+        l = 3;
+    }
+    if (j == 8)
+    {
+        r = 3;
+    }
+    QString css = "#Foo { border-top: %1px solid black; border-bottom: %2px solid black;  border-right: %3px solid black; border-left: %4px solid black; }";
+    css = css.arg(t).arg(b).arg(r).arg(l);
+    le->setStyleSheet(css);
+    ui->mapGridLayout->addWidget(le, i, j);
+}
+
+void Dialog::on_pushButton_Solve_clicked()
+{
+    finished = false;
+    int A[NCELLS];
+    int freeCells = 81;
+    BoardType *board = new BoardType();
+    for(int i=0; i<DIMENSION; i++)
+    {
+        for(int j=0; j<DIMENSION; j++)
+        {
+            std::string currentCellText = ((QLineEdit*)ui->mapGridLayout->itemAtPosition(i,j)->widget())->text().toStdString();
+            if(currentCellText != "")
+            {
+                int value = stoi(currentCellText);
+                board->m[i][j] = value;
+                freeCells--;
+            }
+        }
+    }
+    board->freecount = freeCells;
+    backtrack(A, NCELLS - freeCells, board);
+    for(int i=0; i<DIMENSION; i++)
+    {
+        for(int j=0; j<DIMENSION; j++)
+        {
+            QLineEdit *currentCell = ((QLineEdit*)ui->mapGridLayout->itemAtPosition(i,j)->widget());
+            currentCell->setText(QString::number(board->m[i][j]));
+        }
+    }
 }

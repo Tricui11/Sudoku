@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include<boardtype.cpp>
+#include <QRegularExpressionValidator>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Dialog; }
@@ -16,9 +17,16 @@ public:
     Dialog(QWidget *parent = nullptr);
     ~Dialog();
 
+private slots:
+    void on_pushButton_GenMap_clicked();
+
+    void on_pushButton_Solve_clicked();
+
 private:
     Ui::Dialog *ui;
+    QValidator *cellValidator;
     bool finished;
+
     void backtrack(int a[], int k, BoardType *board);
     void process_solution(int a[], int k, BoardType *board);
     void next_square(int* x, int* y, BoardType *board);
@@ -28,5 +36,8 @@ private:
     bool is_a_solution(int a[], int k, BoardType *board);
     void construct_candidates(int a[], int k, BoardType *board, int c[], int *ncandidates);
     void print_board(BoardType *board);
+    void mapGridLayoutClear();
+    void mapGridLayoutAddCell(QString text, int i, int j);
+    void generateXCellsForGridLayout(int N, int M);
 };
 #endif // DIALOG_H
