@@ -1,2 +1,2 @@
 # BacktrackingAlgorithm
-![plot](resScreen.png)
+![My Image](BacktrackingAlgorithm/resScreen.jpg)
