@@ -23,20 +23,20 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Dialog_t {
     const uint offsetsAndSize[8];
-    char stringdata0[65];
+    char stringdata0[62];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_Dialog_t, stringdata0) + ofs), len 
 static const qt_meta_stringdata_Dialog_t qt_meta_stringdata_Dialog = {
     {
 QT_MOC_LITERAL(0, 6), // "Dialog"
-QT_MOC_LITERAL(7, 28), // "on_pushButton_GenMap_clicked"
-QT_MOC_LITERAL(36, 0), // ""
-QT_MOC_LITERAL(37, 27) // "on_pushButton_Solve_clicked"
+QT_MOC_LITERAL(7, 27), // "on_pushButton_Solve_clicked"
+QT_MOC_LITERAL(35, 0), // ""
+QT_MOC_LITERAL(36, 25) // "on_pushButton_New_clicked"
 
     },
-    "Dialog\0on_pushButton_GenMap_clicked\0"
-    "\0on_pushButton_Solve_clicked"
+    "Dialog\0on_pushButton_Solve_clicked\0\0"
+    "on_pushButton_New_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -70,8 +70,8 @@ void Dialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         auto *_t = static_cast<Dialog *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->on_pushButton_GenMap_clicked(); break;
-        case 1: _t->on_pushButton_Solve_clicked(); break;
+        case 0: _t->on_pushButton_Solve_clicked(); break;
+        case 1: _t->on_pushButton_New_clicked(); break;
         default: ;
         }
     }

@@ -10,11 +10,10 @@ CONFIG += c++17
 
 SOURCES += \
     boardtype.cpp \
-    dialog_set_copy.cpp \
-    dialog_sudoku.cpp \
     main.cpp \
     dialog.cpp \
-    point.cpp
+    point.cpp \
+    sudokuSolver.cpp
 
 HEADERS += \
     dialog.h
