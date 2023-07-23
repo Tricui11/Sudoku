@@ -104,7 +104,6 @@ void Dialog::writeBoard(BoardType *board)
 
 void Dialog::on_pushButton_Solve_clicked()
 {
-    int A[NCELLS];
     BoardType* board = readBoard();
 
     if (solver == nullptr)
@@ -112,6 +111,7 @@ void Dialog::on_pushButton_Solve_clicked()
         solver = new SudokuSolver();
     }
     solver->finished = false;
+    int A[NCELLS];
     solver->backtrack(A, NCELLS - board->freecount, board);
 
     writeBoard(board);
