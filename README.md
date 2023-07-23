@@ -1,2 +1,2 @@
 # BacktrackingAlgorithm
-![Screenshot](resScreen.png)
+![plot](resScreen.png)
