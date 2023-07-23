@@ -1,1 +1,2 @@
 # BacktrackingAlgorithm
+![Screenshot](resScreen.png)
